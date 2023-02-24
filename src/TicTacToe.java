@@ -5,33 +5,35 @@
     import java.util.Scanner;
 
     public class TicTacToe {
+
         static ArrayList<Integer> playerPositions = new ArrayList<>();
         static ArrayList<Integer> computerPositions = new ArrayList<>();
 
-        public static void main(String[] args) {
-            char[][] gameBoard = {{' ', '|', ' ', '|', ' ' },
-                    {'-', '+', '-', '+', '-'},
-                    {' ', '|', ' ', '|', ' '},
-                    {'-', '+', '-', '+', '-'},
-                    {' ', '|', ' ', '|', ' '}};
 
-            printGameBoard(gameBoard);
+        public static void main(String[] args) {
+
+            char [][] gameBoard = PrintGameBoard.GAME_BOARD_TEMPLATE;
+
+            PrintGameBoard printGameBoard = new PrintGameBoard();
+
+            PrintGameBoard.printGameBoard(PrintGameBoard.GAME_BOARD_TEMPLATE);
 
             while (true) {
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("Enter your placement (1-9):");
 
                 int playerPos = scanner.nextInt();
-                while (playerPositions.contains(playerPos) || computerPositions.contains(playerPos)) {
+                while (playerPositions.contains(playerPos) || computerPositions.contains(playerPos) || playerPos <1 || playerPos > 9 ) {
                     System.out.println("Position taken...enter a correct position");
                     playerPos = scanner.nextInt();
                 }
 
                 placePiece(gameBoard, playerPos, "player");
 
-                String result = checkWinner();
-                if (result.length() > 0) {
-                    System.out.println(result);
+
+                ResultType result = checkWinner();
+                if (result != null) {
+                    System.out.println(result.getMessage());
                     break;
                 }
 
@@ -44,24 +46,15 @@
 
                 placePiece(gameBoard, cpPosition, "computer");
 
-                printGameBoard(gameBoard);
+                PrintGameBoard.printGameBoard(PrintGameBoard.GAME_BOARD_TEMPLATE);
 
                 result = checkWinner();
-                if (result.length() > 0) {
-                    System.out.println(result);
+                if (result != null) {
+                    System.out.println(result.getMessage());
                     break;
                 }
             }
         }
-
-            public static void printGameBoard ( char[][] gameBoard){
-                for (char[] row : gameBoard) {
-                    for (char c : row) {
-                        System.out.print(c);
-                    }
-                        System.out.println();
-                }
-            }
 
             public static void placePiece ( char[][] gameBoard, int position, String user){
                 char symbol = ' ';
@@ -82,12 +75,12 @@
                     case 7 -> gameBoard[4][0] = symbol;
                     case 8 -> gameBoard[4][2] = symbol;
                     case 9 -> gameBoard[4][4] = symbol;
-                    default -> {
-                    }
+                    default -> {}
                 }
             }
 
-    public static String checkWinner() {
+    public static ResultType checkWinner() {
+
             List topRow = Arrays.asList(1,2,3);
             List midRow = Arrays.asList(4,5,6);
             List botRow = Arrays.asList(7,8,9);
@@ -114,16 +107,16 @@
 
             for (List l : winningConditions) {
                 if (playerPositions.containsAll(l)) {
-                    return "Congratulations you won!";
+                    return ResultType.PLAYER_WINS;
                 } else if (computerPositions.containsAll(l)) {
-                    return "Computer Wins";
+                    return ResultType.COMPUTER_WINS;
                 }
             }
 
             if (playerPositions.size() + computerPositions.size() == 9) {
-                    return "You are equally smart";
+                    return ResultType.DRAW;
                 }
 
-            return "";
+            return null;
         }
     }
