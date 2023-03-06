@@ -12,6 +12,7 @@
 
         public static void main(String[] args) {
 
+
             char [][] gameBoard = PrintGameBoard.GAME_BOARD_TEMPLATE;
 
             PrintGameBoard printGameBoard = new PrintGameBoard();
@@ -23,7 +24,7 @@
                 System.out.println("Enter your placement (1-9):");
 
                 int playerPos = scanner.nextInt();
-                while (playerPositions.contains(playerPos) || computerPositions.contains(playerPos) || playerPos <1 || playerPos > 9 ) {
+                while (playerPositions.contains(playerPos) || computerPositions.contains(playerPos) || playerPos < 1 || playerPos > 9 ) {
                     System.out.println("Position taken...enter a correct position");
                     playerPos = scanner.nextInt();
                 }
@@ -37,7 +38,7 @@
                     break;
                 }
 
-                //could use AI for this randomiser
+
                 Random random = new Random();
                 int cpPosition = random.nextInt(9) + 1;
                 while (playerPositions.contains(cpPosition) || computerPositions.contains(cpPosition)) {
@@ -56,7 +57,7 @@
             }
         }
 
-            public static void placePiece ( char[][] gameBoard, int position, String user){
+            public static void placePiece (char[][] gameBoard, int position, String user){
                 char symbol = ' ';
                 if (user.equals("player")) {
                     symbol = 'X';
